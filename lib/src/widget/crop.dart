@@ -121,6 +121,10 @@ class Crop extends StatelessWidget {
   /// [false] by default.
   final bool interactive;
 
+  /// If [true], users can move the Crop Widget
+  /// [false] by default.
+  final bool interactiveCrop;
+
   /// If [fixCropRect] and [interactive] are both [true], cropping rect is fixed and can't be moved.
   /// [false] by default.
   final bool fixCropRect;
@@ -170,6 +174,7 @@ class Crop extends StatelessWidget {
     this.fixCropRect = false,
     this.progressIndicator = const SizedBox.shrink(),
     this.interactive = false,
+    this.interactiveCrop = false,
     this.willUpdateScale,
     this.onHistoryChanged,
     FormatDetector? formatDetector,
@@ -209,6 +214,7 @@ class Crop extends StatelessWidget {
             fixCropRect: fixCropRect,
             progressIndicator: progressIndicator,
             interactive: interactive,
+            interactiveCrop: interactiveCrop,
             willUpdateScale: willUpdateScale,
             onHistoryChanged: onHistoryChanged,
             scrollZoomSensitivity: scrollZoomSensitivity,
@@ -242,6 +248,7 @@ class _CropEditor extends StatefulWidget {
   final bool fixCropRect;
   final Widget progressIndicator;
   final bool interactive;
+  final bool interactiveCrop;
   final WillUpdateScale? willUpdateScale;
   final HistoryChangedCallback? onHistoryChanged;
   final ImageCropper imageCropper;
@@ -270,6 +277,7 @@ class _CropEditor extends StatefulWidget {
     required this.fixCropRect,
     required this.progressIndicator,
     required this.interactive,
+    required this.interactiveCrop,
     required this.willUpdateScale,
     required this.onHistoryChanged,
     required this.imageCropper,
@@ -620,6 +628,7 @@ class _CropEditorState extends State<_CropEditor> {
               Listener(
                 onPointerSignal: _handlePointerSignal,
                 child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
                   onScaleStart: widget.interactive ? _handleScaleStart : null,
                   onScaleUpdate: widget.interactive ? _handleScaleUpdate : null,
                   child: Container(
@@ -665,7 +674,8 @@ class _CropEditorState extends State<_CropEditor> {
                   ),
                 ),
               ),
-              if (!widget.interactive && !widget.fixCropRect)
+              if (widget.interactiveCrop == true ||
+                  !widget.interactive && !widget.fixCropRect)
                 Positioned(
                   left: _readyState.cropRect.left,
                   top: _readyState.cropRect.top,

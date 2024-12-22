@@ -161,7 +161,8 @@ class _CropSampleState extends State<CropSample> {
                           cornerDotBuilder: (size, edgeAlignment) =>
                               const SizedBox.shrink(),
                           interactive: true,
-                          fixCropRect: true,
+                          interactiveCrop: true,
+                          fixCropRect: false,
                           radius: 20,
                           initialRectBuilder: InitialRectBuilder.withBuilder(
                             (viewportRect, imageRect) {
